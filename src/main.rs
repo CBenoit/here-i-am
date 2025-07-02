@@ -43,7 +43,7 @@ fn run_server() -> std::io::Result<()> {
 
         if &buf[..len] == PING_MSG {
             socket.send_to(hostname.as_bytes(), src)?;
-            println!("[server] Responded to {} with '{}'", src, hostname);
+            println!("[server] Responded to {} with '{}'", src.ip(), hostname);
         }
     }
 }
@@ -66,7 +66,7 @@ fn run_client() -> std::io::Result<()> {
         match socket.recv_from(&mut buf) {
             Ok((len, src)) => {
                 let reply = &buf[..len];
-                println!("[client] {} → {}", src, String::from_utf8_lossy(reply));
+                println!("[client] {} → {}", src.ip(), String::from_utf8_lossy(reply));
             }
             Err(e) if e.kind() == std::io::ErrorKind::WouldBlock => {
                 let elapsed = now.elapsed().expect("elapsed");
